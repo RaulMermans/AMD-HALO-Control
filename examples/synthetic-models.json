@@ -1,0 +1,113 @@
+{
+  "_note": "Fully synthetic example data for the public edition. Not observed on real hardware; no real machine, network or workload data.",
+  "models": [
+    {
+      "id": "coder-large",
+      "displayName": "Qwen2.5-Coder 32B Instruct (example)",
+      "family": "qwen2.5-coder",
+      "parameterCountBillions": 32,
+      "quantization": "Q4_K_M",
+      "contextWindowTokens": 32768,
+      "capabilities": [
+        "coding"
+      ],
+      "inputModalities": [
+        "text"
+      ],
+      "resources": {
+        "approxMemoryGiB": 20,
+        "accelerator": "gpu"
+      },
+      "provider": "local-openai-compatible",
+      "enabled": true,
+      "availability": "loaded"
+    },
+    {
+      "id": "generalist",
+      "displayName": "Llama 3.1 8B Instruct (example)",
+      "family": "llama-3.1",
+      "parameterCountBillions": 8,
+      "quantization": "Q5_K_M",
+      "contextWindowTokens": 16384,
+      "capabilities": [
+        "general",
+        "reasoning"
+      ],
+      "inputModalities": [
+        "text"
+      ],
+      "resources": {
+        "approxMemoryGiB": 6,
+        "accelerator": "gpu"
+      },
+      "provider": "local-openai-compatible",
+      "enabled": true,
+      "availability": "available"
+    },
+    {
+      "id": "vision-small",
+      "displayName": "Qwen2.5-VL 7B (example)",
+      "family": "qwen2.5-vl",
+      "parameterCountBillions": 7,
+      "quantization": "Q4_K_M",
+      "contextWindowTokens": 8192,
+      "capabilities": [
+        "vision"
+      ],
+      "inputModalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "resources": {
+        "approxMemoryGiB": 7,
+        "accelerator": "gpu"
+      },
+      "provider": "local-openai-compatible",
+      "enabled": true,
+      "availability": "available"
+    },
+    {
+      "id": "embedder",
+      "displayName": "nomic-embed-text v1.5 (example)",
+      "family": "nomic-embed",
+      "parameterCountBillions": 0.14,
+      "quantization": "F16",
+      "contextWindowTokens": 8192,
+      "capabilities": [
+        "embeddings"
+      ],
+      "inputModalities": [
+        "text"
+      ],
+      "resources": {
+        "approxMemoryGiB": 0.5,
+        "accelerator": "cpu"
+      },
+      "provider": "local-openai-compatible",
+      "enabled": true,
+      "availability": "loaded"
+    },
+    {
+      "id": "reasoner-xl",
+      "displayName": "Large reasoning model (example)",
+      "family": "example",
+      "parameterCountBillions": 70,
+      "quantization": "Q4_K_M",
+      "contextWindowTokens": 32768,
+      "capabilities": [
+        "reasoning"
+      ],
+      "inputModalities": [
+        "text"
+      ],
+      "resources": {
+        "approxMemoryGiB": 42,
+        "accelerator": "gpu"
+      },
+      "provider": "local-openai-compatible",
+      "enabled": false,
+      "availability": "disabled"
+    }
+  ]
+}
