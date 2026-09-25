@@ -1,0 +1,12 @@
+{
+  "name": "halo-control-public",
+  "private": true,
+  "description": "HALO Control — public architecture edition. Illustrative contracts and synthetic data.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "route-demo": "node --experimental-strip-types examples/route-demo.ts"
+  },
+  "devDependencies": { "typescript": "^5.6.0" }
+}
