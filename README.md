@@ -6,6 +6,8 @@
 
 It tracks the hardware, the models, which workload may use which capability, how requests are routed to local inference, and what actually ran, all on one machine with no cloud dependency.
 
+![Status: public architecture edition](https://img.shields.io/badge/status-public%20architecture%20edition-555) ![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey) ![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey) ![Target hardware: not yet verified](https://img.shields.io/badge/target%20hardware-not%20yet%20verified-b58900)
+
 ![HALO Control Room — synthetic demo state](screenshots/control-room.png)
 
 <sub>Control Room, recreated for this public edition with fully synthetic state and the project's real design tokens. No real machine, network or workload data is shown.</sub>
@@ -141,4 +143,4 @@ This repository has its own history. It was not forked, mirrored or filtered fro
 
 ---
 
-<sub>© Raul Mermans · [LICENSE](LICENSE)</sub>
+<sub>© Raul Mermans · docs CC BY 4.0, code MIT (see [LICENSE](LICENSE)) · [SECURITY.md](SECURITY.md)</sub>
