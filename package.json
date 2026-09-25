@@ -2,7 +2,7 @@
   "name": "halo-control-public",
   "private": true,
   "description": "HALO Control — public architecture edition. Illustrative contracts and synthetic data.",
-  "license": "MIT",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit -p .",
