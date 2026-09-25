@@ -1,0 +1,54 @@
+{
+  "_note": "Fully synthetic example data for the public edition. Not observed on real hardware; no real machine, network or workload data.",
+  "events": [
+    {
+      "at": "10:41:52",
+      "workload": "open-vscode",
+      "capability": "coding",
+      "model": "coder-large",
+      "status": "succeeded",
+      "latencyMs": 3180
+    },
+    {
+      "at": "10:41:40",
+      "workload": "jarvis",
+      "capability": "embeddings",
+      "model": "embedder",
+      "status": "succeeded",
+      "latencyMs": 84
+    },
+    {
+      "at": "10:41:22",
+      "workload": "clipping",
+      "capability": "vision",
+      "model": "vision-small",
+      "status": "queued",
+      "latencyMs": null
+    },
+    {
+      "at": "10:40:58",
+      "workload": "jarvis",
+      "capability": "general",
+      "model": "generalist",
+      "status": "succeeded",
+      "latencyMs": 1420
+    },
+    {
+      "at": "10:40:31",
+      "workload": "publishing",
+      "capability": "reasoning",
+      "model": null,
+      "status": "denied",
+      "reason": "capability not allowed for workload",
+      "latencyMs": 2
+    },
+    {
+      "at": "10:39:47",
+      "workload": "open-vscode",
+      "capability": "reasoning",
+      "model": "generalist",
+      "status": "succeeded",
+      "latencyMs": 2260
+    }
+  ]
+}

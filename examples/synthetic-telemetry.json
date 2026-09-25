@@ -1,0 +1,62 @@
+{
+  "_note": "Fully synthetic example data for the public edition. Not observed on real hardware; no real machine, network or workload data.",
+  "sampledAt": "2030-03-14T10:42:05Z",
+  "source": "synthetic",
+  "cpu": {
+    "logicalCores": 32,
+    "utilizationPct": 38
+  },
+  "gpu": {
+    "available": true,
+    "utilizationPct": 71,
+    "evidence": "synthetic"
+  },
+  "memory": {
+    "unifiedTotalGiB": 128,
+    "usedGiB": 61.4,
+    "gpuReservedGiB": 48
+  },
+  "thermal": {
+    "available": true,
+    "packageC": 67
+  },
+  "inference": {
+    "activeModel": "coder-large",
+    "tokensPerSecond": 24.8,
+    "queuedRequests": 2,
+    "inFlight": 1
+  },
+  "disk": {
+    "modelStoreUsedPct": 54
+  },
+  "series": {
+    "gpuUtilPct": [
+      22,
+      31,
+      45,
+      58,
+      64,
+      70,
+      73,
+      69,
+      71,
+      74,
+      68,
+      71
+    ],
+    "tokensPerSecond": [
+      0,
+      12,
+      21,
+      25,
+      24,
+      26,
+      23,
+      25,
+      24,
+      25,
+      24,
+      24.8
+    ]
+  }
+}
