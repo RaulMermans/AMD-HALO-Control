@@ -11,7 +11,7 @@
     },
     {
       "at": "10:41:40",
-      "workload": "jarvis",
+      "workload": "iris",
       "capability": "embeddings",
       "model": "embedder",
       "status": "succeeded",
@@ -27,7 +27,7 @@
     },
     {
       "at": "10:40:58",
-      "workload": "jarvis",
+      "workload": "iris",
       "capability": "general",
       "model": "generalist",
       "status": "succeeded",

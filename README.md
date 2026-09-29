@@ -39,7 +39,7 @@ flowchart TB
   CORE <--> CPL[Compute plane<br/>registered services only]
   INF <--> LLM[(Local runtime<br/>OpenAI-compatible)]
 
-  J[JARVIS OS] & V[Open VS Code Agent] & C[Clipping Agents] & P[Publishing Agents] -->|capability requests| AUTH
+  J[IRIS OS] & V[Open VS Code Agent] & C[Clipping Agents] & P[Publishing Agents] -->|capability requests| AUTH
 ```
 
 → [docs/architecture.md](docs/architecture.md)
@@ -91,7 +91,7 @@ CPU, GPU, unified memory (including the GPU-reserved share), temperature, active
 
 ## Workloads
 
-JARVIS OS, Open VS Code Agent, Clipping Agents and Publishing Agents are registered as **abstract consumers**. Each has an id, an enabled flag and a capability allowlist, and the pipeline is authenticate → authorize → route → infer → record. → [docs/workload-management.md](docs/workload-management.md)
+IRIS OS, Open VS Code Agent, Clipping Agents and Publishing Agents are registered as **abstract consumers**. Each has an id, an enabled flag and a capability allowlist, and the pipeline is authenticate → authorize → route → infer → record. → [docs/workload-management.md](docs/workload-management.md)
 
 ## Security model
 

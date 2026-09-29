@@ -5,7 +5,7 @@
 ```mermaid
 flowchart TB
   subgraph W["Workload consumers (abstract)"]
-    J[JARVIS OS]
+    J[IRIS OS]
     V[Open VS Code Agent]
     C[Clipping Agents]
     P[Publishing Agents]

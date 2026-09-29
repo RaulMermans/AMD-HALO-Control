@@ -1,6 +1,6 @@
 # Capability routing
 
-Workloads ask for a **capability**, not a model. That keeps JARVIS, the coding agent and the media pipelines independent of which model is installed this month.
+Workloads ask for a **capability**, not a model. That keeps IRIS, the coding agent and the media pipelines independent of which model is installed this month.
 
 ```mermaid
 flowchart LR

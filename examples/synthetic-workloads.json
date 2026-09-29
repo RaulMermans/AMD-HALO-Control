@@ -2,8 +2,8 @@
   "_note": "Fully synthetic example data for the public edition. Not observed on real hardware; no real machine, network or workload data.",
   "workloads": [
     {
-      "id": "jarvis",
-      "displayName": "JARVIS OS",
+      "id": "iris",
+      "displayName": "IRIS OS",
       "kind": "assistant",
       "enabled": true,
       "allowedCapabilities": [

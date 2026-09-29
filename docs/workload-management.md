@@ -4,7 +4,7 @@ HALO serves several local AI workloads. It treats them as **abstract consumers**
 
 | Workload | Kind | Typical capabilities |
 | --- | --- | --- |
-| JARVIS OS | Personal AI operating system | general, reasoning, embeddings |
+| IRIS OS | Personal AI operating system | general, reasoning, embeddings |
 | Open VS Code Agent | Local coding agent | coding, reasoning |
 | Clipping Agents | Media pipeline | vision, general |
 | Publishing Agents | Content pipeline | general |
