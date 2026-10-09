@@ -26,7 +26,21 @@ Every observation is tagged with how it is known:
 | `halo-real` | Observed on the target AMD Halo machine | Anything beyond what was executed |
 | `unavailable` | The provider can't observe this signal | — |
 
-This discipline carries through to project reporting as well. The sub-classes used there are `local-real-ui` (the Control Room against a real local core), `application-real` (a real workload request reached the core), and `model-runtime-real` (a real model answered).
+This discipline carries through to project reporting, with one canonical vocabulary:
+
+| Class | What it can't prove |
+| --- | --- |
+| `local-real-protocol` (a real process or transport boundary) | That the far side is a real runtime |
+| `local-real-service-runtime` (real managed child processes) | systemd, readiness or health |
+| `durability-local-real` (real close/reopen/crash on SQLite or files) | Power-loss safety, target storage |
+| `security-local-real` (a real flow proves a bypass fails) | Remote or LAN threat models |
+| `recovery-local-real` (real durable state resolved after a failure) | Recovery on the target |
+| `control-room-local-real` (real browser over a live local core) | Application or runtime behaviour |
+| `application-real` (a real workload request reached the core) | That a model answered |
+| `model-runtime-real` (a real model answered through HALO) | Target compatibility unless run there |
+| `deferred-to-hardware-phase`, `unverified`, `not-implemented` | — |
+
+Hardware bring-up adds an ordered ladder, from a generic local machine through the target OS, the Halo hardware, ROCm, a real model runtime, application traffic, multiple workloads, and finally reboot recovery on the target. **A higher class is never inferred from a lower one**, and the hardware-verified flag is set only by an exact observed fingerprint of the target machine.
 
 ## Privacy of telemetry
 

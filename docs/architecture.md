@@ -21,13 +21,19 @@ flowchart TB
     HW[Telemetry providers]
   end
 
-  subgraph COMP["Compute plane"]
+  subgraph COMP["Compute plane (separate daemon + worker)"]
     D[Infrastructure daemon<br/>local-only channel]
-    S[Registered managed services]
+    S[Service runtime<br/>registered processes]
+    RC[Reconciler]
+    JQ[(Durable job queue)]
+    WK[Job worker]
+    SP[Storage · database providers]
+    BK[Recovery points]
+    ST[(Infrastructure state store)]
   end
 
   RT[(Local inference runtime<br/>OpenAI-compatible)]
-  UI[Control Room<br/>read-only client]
+  UI[Control Room<br/>read-first client]
   HWX[[AMD Halo hardware]]
 
   W -->|authenticated capability request| AUTH
@@ -36,8 +42,12 @@ flowchart TB
   ROUTE --> INF --> RT
   AUTH -. start/complete .-> ACT
   HWX --> HW
-  CP -->|typed operation on a registered service id| D --> S
-  UI -->|validated reads| CP
+  CP -->|approved, typed operations| D
+  D --> S & RC & BK
+  RC --> SP & S
+  WK --> JQ
+  D --> ST
+  UI -->|validated reads · operator proposals| CP
 ```
 
 ## Planes and authorities
@@ -48,10 +58,16 @@ flowchart TB
 | Which models exist and what they can do | Control plane (model registry) |
 | Which model serves a capability | Control plane (routing policy) |
 | What actually ran, and how it ended | Activity store |
+| Desired workload state (storage, database, jobs, services) | Control plane (workload registry) |
+| Operator authorization and approval | Control plane (operator governance) |
 | Actual service/process state | Compute plane (reports it; control never invents it) |
+| Job truth, storage and database allocations | Compute plane (state store + providers) |
+| Infrastructure audit trail | Compute plane events, correlated by operation id |
 | Hardware facts | Telemetry provider, tagged with evidence class |
 
-**Control says what should happen, the compute plane executes only pre-registered operations, and the compute plane reports what actually happened.**
+**Control says what should happen, the compute plane executes only pre-registered operations, and the compute plane reports what actually happened.** Registered (application registry), provisioned (compute allocation) and running (compute observation) are three separate facts.
+
+The future model runtime enters through the same boundary: application → inference API → capability router → model registry → compute-plane model runtime → local runtime. That path is designed but not yet exercised with a real model.
 
 ## Request lifecycle
 
@@ -69,3 +85,6 @@ flowchart TB
 - **Mock and live evidence are kept apart.** Every observation carries an evidence class (see [telemetry.md](telemetry.md)).
 - **Fail closed and fail visible.** Disabled inference, an unreachable compute plane or degraded history show up as explicit statuses, never as fabricated values.
 - **Failure isolation.** If the compute plane is down, the control plane keeps serving unrelated APIs.
+- **No model authority.** No model, agent or prompt takes part in authentication, authorization, approval or execution gating.
+
+Detail: [service-runtime.md](service-runtime.md) · [operations-and-recovery.md](operations-and-recovery.md)

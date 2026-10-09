@@ -4,3 +4,4 @@ export * from './capability';
 export * from './telemetry';
 export * from './workload';
 export * from './activity';
+export * from './infrastructure';
