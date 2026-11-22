@@ -6,7 +6,7 @@
 
 It tracks the hardware, the models, which workload may use which capability, how requests are routed to local inference, which services, storage and jobs each workload is allowed to have, and what actually ran, all on one machine with no cloud dependency.
 
-![Status: public architecture edition](https://img.shields.io/badge/status-public%20architecture%20edition-555) ![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey) ![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey) ![Target hardware: not yet verified](https://img.shields.io/badge/target%20hardware-not%20yet%20verified-b58900)
+![Status: public architecture edition](https://img.shields.io/badge/status-public%20architecture%20edition-555) ![Docs: CC BY 4.0](https://img.shields.io/badge/docs-CC%20BY%204.0-lightgrey) ![Code: MIT](https://img.shields.io/badge/code-MIT-lightgrey) ![Target hardware: physical pilot validated](https://img.shields.io/badge/target%20hardware-physical%20pilot%20validated-2f6f4f)
 
 ![HALO Control Room — synthetic demo state](screenshots/control-room.png)
 
@@ -16,7 +16,9 @@ It tracks the hardware, the models, which workload may use which capability, how
 
 ---
 
-> **Public edition.** This repository is the public architecture and engineering edition of a private local-infrastructure project. It contains design documentation, illustrative contracts, a small illustrative routing function and synthetic data. It does **not** contain the production implementation, configuration or any infrastructure details. [Scope](#public-repository-scope).
+> **Public edition (updated 22 November 2026).** This repository is the public architecture and engineering edition of a private local-infrastructure project. It contains design documentation, illustrative contracts, a small illustrative routing function and synthetic data. It does **not** contain the production implementation, configuration or any infrastructure details. [Scope](#public-repository-scope).
+
+**Latest physical milestone:** real, operator-supervised local model inference and governed 4B/14B-class runtime lifecycle were exercised on AMD Halo hardware on 21–22 November 2026. [Read the sanitized acceptance matrix and its limits](docs/PHYSICAL_ACCEPTANCE_2026-11-22.md). This is a single-host pilot, **not production readiness**.
 
 ## Architecture
 
@@ -91,7 +93,7 @@ Each model record holds its family, size, quantization, context window, capabili
 Task → required capability → declared candidates → eligibility + resource checks → selected model & runtime
 ```
 
-Today routing is deterministic and driven by versioned policy that is cross-checked against the registry at startup. An unroutable request is an explicit error. Resource-aware selection is the next step, and it is shown by a small illustrative router you can run:
+Routing remains deterministic and driven by versioned policy checked against the registry. In the private hardware pilot, admitted dispatch is pinned to the approved runtime generation; lifecycle starts are gated by observed memory headroom. This does **not** mean the system automatically chooses an optimal model, migrates in-flight work or evicts external processes. This public repo includes a small **illustrative** router you can run:
 
 ```bash
 node --experimental-strip-types examples/route-demo.ts
@@ -105,7 +107,7 @@ The control plane decides what *should* exist; a separate daemon executes and re
 
 ## Telemetry
 
-CPU, GPU, unified memory (including the GPU-reserved share), temperature, active model, throughput and queue depth. Every signal carries an evidence class (`mocked`, `local-real`, `halo-real` or `unavailable`), so the Control Room never shows a guess as a measurement. Project reporting uses the same discipline with a wider vocabulary, and a higher class is never inferred from a lower one. → [docs/telemetry.md](docs/telemetry.md)
+CPU, GPU, unified memory (including the GPU-reserved share), temperature, active model, throughput and queue depth where supported. The private physical pilot also observes per-runtime resource attribution and explicit occupancy freshness. Every signal carries an evidence class (`mocked`, `local-real`, `halo-real` or `unavailable`), so the Control Room never shows a guess as a measurement. Project reporting uses the same discipline with a wider vocabulary, and a higher class is never inferred from a lower one. → [docs/telemetry.md](docs/telemetry.md)
 
 ## Workloads
 
@@ -138,32 +140,26 @@ The Control Room image above is rendered from exactly these files.
 
 ## Current development status
 
-The private implementation has reached a frozen **pre-Halo baseline**: everything that can be built and verified without the target machine is implemented and evaluated on a development workstation. The target hardware has not been brought up yet.
+**Private system, as observed 22 November 2026:** operator-supervised local hardware pilot. The original frozen pre-Halo baseline is historical, not the current state. The results below are described in the [sanitized physical acceptance summary](docs/PHYSICAL_ACCEPTANCE_2026-11-22.md); the raw host evidence remains private.
 
-| Area | Status | Evidence |
+| Area | State | Evidence boundary |
 | --- | --- | --- |
-| Headless control plane, contracts, health/version/system APIs | Implemented | `local-real` |
-| Model registry + inspection | Implemented (development example entries) | `local-real` |
-| Deterministic capability routing | Implemented | `local-real` |
-| Application identity + capability authorization | Implemented | `local-real` |
-| SQLite activity history | Implemented | `durability-local-real` |
-| Compute-plane daemon + service runtime (registered managed processes) | Implemented | `local-real-service-runtime` |
-| Workload registry + deterministic reconciliation | Implemented | `local-real` |
-| Durable job queue + separate worker | Implemented | `local-real`, crash recovery `recovery-local-real` |
-| Governed storage allocation | Implemented | `local-real` |
-| PostgreSQL provisioning | Implemented; real-server acceptance deferred | `deferred-to-hardware-phase` |
-| Infrastructure audit events + diagnostics | Implemented | `local-real` |
-| Recovery points + staging restore | Implemented; **production restore not enabled** | `local-real` |
-| Operator auth, approval gates, force-read-only | Implemented | `security-local-real` |
-| Failure-injection eval suites | 49/49 deterministic, 9/9 local real-fault (development workstation) | `mocked` / `local-real` |
-| Control Room (read-first, infrastructure views, governed actions) | Implemented | `control-room-local-real` |
-| Real workload requests reaching HALO (assistant, publishing, clipping) | Demonstrated, inference disabled | `application-real` |
-| Real model runtime answering through HALO | **Not yet verified** | `unverified` |
-| Running on the AMD Halo target hardware | **Not yet verified**: hardware bring-up pending | `unverified` |
-| Resource & Capacity Manager, resource-aware routing | Specified; built from real hardware measurements | Illustrative code only |
-| systemd supervision, reboot recovery | Hardware phase | `not-implemented` |
+| Core identity, capability authorization, model registry, read-first Control Room | Implemented; inspected on the target machine | Local service and operator observations |
+| Versioned routing and request attribution | Implemented; real inference routes to a pinned runtime generation | Physical sequential 4B/14B request acceptance |
+| Local model inference | **Physically exercised** through HALO on AMD Halo | Operator-supervised 4B-class model requests |
+| Inference admission and backend occupancy | Implemented with bounded admission, freshness checks and refusal states | Physically exercised; no saturation benchmark |
+| Hardware/resource observation | Runtime ownership, CPU/GPU/memory signals and per-runtime VRAM evidence where measurable | Hardware observations, with unknowns labeled unavailable |
+| Managed runtime start, reuse and safe stop | **Physically exercised** for a second 14B-class model | Headroom gate, no duplicate launch, busy-stop refusal, GPU memory release |
+| Coordinated Core/compute-plane release activation | Exercised as an operator-reviewed deployment | Compatible pair, restored previously approved runtime |
+| Deterministic failure-injection and local process-fault suites | Passed in private acceptance record | 58/58 deterministic, 9/9 local process-fault; raw suites private |
+| Storage, durable job queue, reconciliation and operator governance | Implemented in private system | Not all subsystems re-qualified by the 22 Nov runtime test |
+| Resource scheduling | Conservative single-host admission and serialized starts | **Not** adaptive multi-model optimization or cluster scheduling |
+| Long-running stability, reboot recovery, full rollback and production restore | **Not established** by this acceptance | No production claim or completed endurance benchmark |
+| External clients or commercial deployment | Not established | Local personal infrastructure only |
 
-Maturity by capability on a 0–6 evidence scale: [docs/PROJECT_PROFILE.md](docs/PROJECT_PROFILE.md).
+The difference between **implemented**, **tested in isolation**, **observed on hardware** and **proven in sustained operation** is intentional. Nothing in this public edition should be interpreted as an independent audit or an external production endorsement.
+
+Maturity by capability: [docs/PROJECT_PROFILE.md](docs/PROJECT_PROFILE.md). Test scope and caveats: [physical acceptance summary](docs/PHYSICAL_ACCEPTANCE_2026-11-22.md).
 
 ## Public repository scope
 

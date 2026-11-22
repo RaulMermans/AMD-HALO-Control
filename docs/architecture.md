@@ -67,7 +67,7 @@ flowchart TB
 
 **Control says what should happen, the compute plane executes only pre-registered operations, and the compute plane reports what actually happened.** Registered (application registry), provisioned (compute allocation) and running (compute observation) are three separate facts.
 
-The future model runtime enters through the same boundary: application → inference API → capability router → model registry → compute-plane model runtime → local runtime. That path is designed but not yet exercised with a real model.
+The private hardware pilot now exercises this inference path with real local models: application → inference API → capability router → model registry → admission and runtime-identity pin → compute-plane runtime → local model. The runtime generation and dispatch lease remain bound to the admitted request. See the [public physical acceptance summary](PHYSICAL_ACCEPTANCE_2026-11-22.md). The implementation is not included here.
 
 ## Request lifecycle
 
@@ -75,8 +75,9 @@ The future model runtime enters through the same boundary: application → infer
 2. **Authenticate, then authorize:** is the workload known, enabled, and granted this capability? If not, it is denied before anything else runs.
 3. An activity record is opened (`running`).
 4. **Route:** capability → registered, enabled, capable model (see [capability-routing.md](capability-routing.md)).
-5. **Infer** through the provider boundary, with a timeout. Provider endpoints and model references never leave the server side.
-6. The activity record is completed once, with a typed outcome and latency. Content is never stored.
+5. **Admit and pin:** refuse stale/uncertain occupancy or inadequate resource headroom; bind an approved resident runtime identity and generation to the request. No implicit cross-runtime failover.
+6. **Dispatch:** acquire the runtime lease and infer through the local provider boundary. Lifecycle stops refuse while leases are held. Provider addresses and credentials remain server-side.
+7. **Complete and release:** record a typed outcome and latency, then release the lease. Prompts/responses are not retained in activity history.
 
 ## Design properties
 
@@ -86,5 +87,6 @@ The future model runtime enters through the same boundary: application → infer
 - **Fail closed and fail visible.** Disabled inference, an unreachable compute plane or degraded history show up as explicit statuses, never as fabricated values.
 - **Failure isolation.** If the compute plane is down, the control plane keeps serving unrelated APIs.
 - **No model authority.** No model, agent or prompt takes part in authentication, authorization, approval or execution gating.
+- **Safe multi-runtime lifecycle (private pilot).** Serialized, resource-gated start/reuse; dispatch leases; refusal of unsafe stops; verified resource release. Physically exercised on a single AMD Halo host in November 2026, not proven at multi-user production scale.
 
 Detail: [service-runtime.md](service-runtime.md) · [operations-and-recovery.md](operations-and-recovery.md)
